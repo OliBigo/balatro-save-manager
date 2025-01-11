@@ -4,6 +4,7 @@ from supabase import create_client, Client
 # Replace these with your Supabase project URL and API key
 SUPABASE_URL = "https://ppfzupfcibjzuvxotlpm.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwZnp1cGZjaWJqenV2eG90bHBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY0NjE1NTYsImV4cCI6MjA1MjAzNzU1Nn0.CdyUL3OXcVPUcjn6pDTtbG6vEIVr1RWyolHCQzElneI"
+BUCKET_NAME = "save_files"
 
 # Local path where the file will be temporarily stored
 APP_PACKAGE_NAME = "com.unofficial.balatro"
@@ -57,7 +58,6 @@ def cleanup_remote_tmp_path():
         print(f"Failed to clean up the temporary file. Error: {result.stderr}")
 
 def main():
-    bucket_name = "save_files"
     user_id = input("Enter your user ID (as a number): ")
     destination_path = f"{user_id}/meta.jkr"
     isDownload = input("Do you want to download your save file from the database or upload your save to the database? (d/u): ").strip().lower()
@@ -65,7 +65,7 @@ def main():
     if isDownload == "d":
         try:
             # Fetch the file from the storage bucket
-            data = supabase.storage.from_(bucket_name).download(destination_path)
+            data = supabase.storage.from_(BUCKET_NAME).download(destination_path)
             if data:
                 with open(LOCAL_TMP_PATH, "wb") as file:
                     file.write(data)
@@ -81,7 +81,7 @@ def main():
     elif isDownload == "u":
         try:
             pull_file_with_adb()
-            update_file_from_bucket(bucket_name, REMOTE_TMP_PATH, destination_path)
+            update_file_from_bucket(BUCKET_NAME, REMOTE_TMP_PATH, destination_path)
             print("File uploaded successfully!")
         except subprocess.CalledProcessError as e:
             print(f"ADB command failed: {e}")

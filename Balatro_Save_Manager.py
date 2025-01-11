@@ -4,6 +4,7 @@ from supabase import create_client, Client
 
 SUPABASE_URL = "https://ppfzupfcibjzuvxotlpm.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwZnp1cGZjaWJqenV2eG90bHBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY0NjE1NTYsImV4cCI6MjA1MjAzNzU1Nn0.CdyUL3OXcVPUcjn6pDTtbG6vEIVr1RWyolHCQzElneI"
+BUCKET_NAME = "save_files"
 
 # Initialize Supabase client
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -30,8 +31,6 @@ def update_file_from_bucket(bucket_name: str, file_path: str, destination_path: 
         return supabase.storage.from_(bucket_name).update(file=file, path=destination_path)        
 
 def main():
-    bucket_name = "save_files"
-
     isDownload = input("Do you want to download a save file or upload a save file? (d/u): ").strip().lower()
 
     if isDownload == "d":
@@ -41,7 +40,7 @@ def main():
 
         try:
             # Fetch the file from the storage bucket
-            data = supabase.storage.from_(bucket_name).download(destination_path)
+            data = supabase.storage.from_(BUCKET_NAME).download(destination_path)
             if data:
                 with open(path, "wb") as file:
                     file.write(data)
@@ -68,10 +67,10 @@ def main():
                 result = supabase.table("Saves").select("file_key").eq("id", int(user_id)).execute()
                 if result.data:
                     # Update the file from the storage bucket
-                    data = update_file_from_bucket(bucket_name, file_path, destination_path)
+                    data = update_file_from_bucket(BUCKET_NAME, file_path, destination_path)
                     if data != None:
                         print("File uploaded and database updated successfully!")
-                        public_url = supabase.storage.from_(bucket_name).get_public_url(destination_path)
+                        public_url = supabase.storage.from_(BUCKET_NAME).get_public_url(destination_path)
                         print("Public URL:", public_url)
                     else:
                         print("Failed to update the database.")
@@ -89,14 +88,14 @@ def main():
 
             try:
                 # Upload the file to the storage bucket
-                file_key = upload_file_to_bucket(bucket_name, file_path, destination_path, user_id)
+                file_key = upload_file_to_bucket(BUCKET_NAME, file_path, destination_path, user_id)
 
                 # Insert a new record into the database with the user ID and file's storage key
                 data = supabase.table("Saves").insert({"id": user_id, "file_key": file_key}).execute()
                 if data.data:
                     print(f"New save added successfully! Your user ID is: {user_id}")
                     print("Make sure to note down your user ID for future reference.")
-                    public_url = supabase.storage.from_(bucket_name).get_public_url(destination_path)
+                    public_url = supabase.storage.from_(BUCKET_NAME).get_public_url(destination_path)
                     print("Public URL:", public_url)
                 else:
                     print("Failed to add a new save. Please try again.")

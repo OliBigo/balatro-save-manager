@@ -9,6 +9,8 @@ Balatro Save Manager is not very secure since it requires you to have wireless d
 
 Also, the setup on mobile is not very user friendly, so I only recommend it for users with some experience.
 
+Finally, always make sure to have a backup of your save files just in case.
+
 ## Features
 
 - Upload save files from your computer or mobile device to the cloud.

@@ -1,11 +1,9 @@
 import random
 import os
 from supabase import create_client, Client
-from dotenv import load_dotenv
 
-load_dotenv()
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+SUPABASE_URL = "https://ppfzupfcibjzuvxotlpm.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwZnp1cGZjaWJqenV2eG90bHBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY0NjE1NTYsImV4cCI6MjA1MjAzNzU1Nn0.CdyUL3OXcVPUcjn6pDTtbG6vEIVr1RWyolHCQzElneI"
 
 # Initialize Supabase client
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)

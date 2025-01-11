@@ -1,10 +1,7 @@
 import subprocess
-import os
 from supabase import create_client, Client
-from dotenv import load_dotenv
 
 # Replace these with your Supabase project URL and API key
-load_dotenv("env_file.txt") # Use a file different than .env since having a file called .env did not work on my phone
 SUPABASE_URL = "https://ppfzupfcibjzuvxotlpm.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwZnp1cGZjaWJqenV2eG90bHBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY0NjE1NTYsImV4cCI6MjA1MjAzNzU1Nn0.CdyUL3OXcVPUcjn6pDTtbG6vEIVr1RWyolHCQzElneI"
 
